@@ -1,0 +1,49 @@
+from flask import Flask, request, jsonify
+import joblib
+import numpy as np
+import pandas as pd
+
+app = Flask(__name__)
+
+model = joblib.load('like_predictor_guddu.pkl')
+tfidf = joblib.load('tfidf_vectorizer_second.pkl')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    
+    try:
+        # Extract structured features from input JSON
+        structured_data = {
+            'has_media': data['has_media'],
+            'hour': data['hour'],
+            'word_count': data['word_count'],
+            'char_count': data['char_count'],
+            'sentiment': data['sentiment'],
+            'company_encoded': data['company_encoded'],
+            'day_of_week_encoded': data['day_of_week_encoded'],
+            'avg_likes_per_company': data['avg_likes_per_company']
+        }
+        
+        # Transform the text using TF-IDF
+        text = data['content'] 
+        tfidf_features = tfidf.transform([text]).toarray()
+        
+        # Combine structured features and TF-IDF features
+        structured_array = np.array(list(structured_data.values())).reshape(1, -1)
+        
+        features = np.hstack([structured_array, tfidf_features])
+        
+        # Predict and inverse log transform
+        prediction_log = model.predict(features)[0]
+        prediction = np.expm1(prediction_log)
+        
+        return jsonify({'predicted_likes': float(prediction)})
+    
+    except KeyError as e:
+        return jsonify({'error': f'Missing key {str(e)}'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
