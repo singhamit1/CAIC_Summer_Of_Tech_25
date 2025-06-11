@@ -5,7 +5,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
-model = joblib.load('like_predictor_guddu.pkl')
+model = joblib.load('like_predictor_returns.pkl')
 tfidf = joblib.load('tfidf_vectorizer_second.pkl')
 
 @app.route('/predict', methods=['POST'])
