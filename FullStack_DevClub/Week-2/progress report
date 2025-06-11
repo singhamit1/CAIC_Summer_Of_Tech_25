@@ -1,0 +1,23 @@
+Work done this week:
+Set up backend using Node.js + Express
+
+Connected MongoDB using Mongoose
+
+Created User Schema with validation
+
+Implemented authentication API (register/login/profile)
+
+Added JWT-based login and bcrypt password hashing
+
+Started basic React UI for login and chat interface
+
+Problems Faced:
+Faced CORS issues, resolved using cors middleware
+
+MongoDB connection failed initially due to wrong URI
+
+Debugging JWT token errors and protecting routes
+
+Struggled with bcrypt async/await usage in password verification
+
+Learned to structure API routes properly using Express Router
