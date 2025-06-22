@@ -11,3 +11,4 @@ Form - 2 :
      "prompt" : "Nike is going to open"
 }
 With prompt limit of "80" letters.
+This automatically forms tweets using AI. 
